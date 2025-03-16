@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState, useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -27,10 +28,12 @@ const Hand: React.FC<{
 
   return (
     <div className="hand-container h-[200px] relative">
+      {/* Palm with 3D effect using gradients and shadows */}
       <div 
         className={cn(
-          "palm absolute bg-primary/20 rounded-[40%]",
-          isAnimating ? "animate-hand-wave" : ""
+          "palm absolute rounded-[40%] shadow-lg",
+          isAnimating ? "animate-hand-wave" : "",
+          "bg-gradient-to-br from-[#403E43] to-[#221F26]"
         )}
         style={{
           left: `${palm.x}%`,
@@ -42,18 +45,21 @@ const Hand: React.FC<{
             Math.pow(handPosition.rotation.y, 2) +
             Math.pow(handPosition.rotation.z, 2)
           )}deg)`,
+          boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.6), inset 2px 2px 4px rgba(255, 255, 255, 0.1), inset -2px -2px 4px rgba(0, 0, 0, 0.4)"
         }}
       />
       
+      {/* Fingers with 3D effect */}
       {fingers.map((finger, index) => {
         const fingerClass = finger.isBent ? "rounded-t-full" : "rounded-full";
         return (
           <div
             key={`finger-${index}`}
             className={cn(
-              "finger absolute bg-primary/30",
+              "finger absolute",
               fingerClass,
-              isAnimating ? "animate-finger-move" : ""
+              isAnimating ? "animate-finger-move" : "",
+              "bg-gradient-to-br from-[#333333] to-[#222222]"
             )}
             style={{
               left: `${finger.x}%`,
@@ -63,6 +69,7 @@ const Hand: React.FC<{
               transform: `rotate(${finger.rotation}deg)`,
               transformOrigin: "bottom center",
               animationDelay: `${index * 0.1}s`,
+              boxShadow: "1px 2px 4px rgba(0, 0, 0, 0.6), inset 1px 1px 2px rgba(255, 255, 255, 0.1), inset -1px -1px 2px rgba(0, 0, 0, 0.4)"
             }}
           />
         );
@@ -194,9 +201,9 @@ const SignLanguage: React.FC<SignLanguageProps> = ({
         </div>
       </div>
 
-      <Card className="border overflow-hidden">
+      <Card className="border overflow-hidden shadow-lg">
         <CardContent className="p-0">
-          <div className="bg-secondary p-2 flex items-center justify-between">
+          <div className="bg-[#1A1F2C] p-2 flex items-center justify-between">
             <div className="flex items-center">
               <HandIcon className="w-4 h-4 mr-2 text-muted-foreground" />
               <span className="text-sm font-medium">
@@ -204,13 +211,16 @@ const SignLanguage: React.FC<SignLanguageProps> = ({
               </span>
             </div>
             {currentLetter && (
-              <div className="bg-primary/10 px-2 py-1 rounded text-sm">
+              <div className="bg-primary/10 px-2 py-1 rounded text-sm backdrop-blur-sm">
                 Letter: {currentLetter.toUpperCase()}
               </div>
             )}
           </div>
           
-          <div className="flex items-center justify-center p-4 bg-white dark:bg-gray-950 h-[250px]">
+          <div className="flex items-center justify-center p-4 bg-gradient-to-br from-[#222222] to-[#000000e6] h-[250px] relative">
+            {/* Add a subtle glow effect in the background */}
+            <div className="absolute inset-0 bg-gradient-radial from-[#3336] to-transparent opacity-20" />
+            
             {gestures.length > 0 ? (
               <Hand 
                 gesture={gestures[currentGestureIndex]} 
