@@ -14,7 +14,7 @@ export interface SpeechRecognitionOptions {
 }
 
 class SpeechRecognizer {
-  private recognition: SpeechRecognition | null = null;
+  private recognition: any = null; // Using 'any' as a workaround for the SpeechRecognition type
   private isListening: boolean = false;
   private options: SpeechRecognitionOptions = {
     language: 'en-US',
@@ -115,7 +115,9 @@ export interface SpeechSynthesisOptions {
 export const synthesizeSpeech = (text: string, options: SpeechSynthesisOptions = {}) => {
   if (!('speechSynthesis' in window)) {
     console.error('Speech synthesis not supported');
-    options.onError?.(new SpeechSynthesisErrorEvent('error', { error: 'not-supported' }));
+    // Create a custom error event with a valid error code
+    const errorEvent = new SpeechSynthesisErrorEvent('error', { error: 'synthesis-unavailable' });
+    options.onError?.(errorEvent);
     return false;
   }
 
