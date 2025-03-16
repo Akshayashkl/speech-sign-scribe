@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -108,7 +107,9 @@
   }
 
   .hand-container {
-    @apply relative w-full h-full;
+    position: relative;
+    transform-style: preserve-3d;
+    perspective: 1000px;
   }
   
   .finger {
@@ -117,7 +118,7 @@
   }
 
   .palm {
-    @apply absolute bg-gray-200 dark:bg-gray-700 rounded-2xl;
+    transition: transform 0.3s ease-in-out;
   }
   
   .active-recording {
@@ -141,3 +142,22 @@
     background-position: 0% 50%;
   }
 }
+
+@keyframes handWave {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-5deg); }
+    75% { transform: rotate(5deg); }
+  }
+  
+@keyframes fingerMove {
+    0%, 100% { transform: scaleY(1); }
+    50% { transform: scaleY(0.95); }
+  }
+  
+  .animate-hand-wave {
+    animation: handWave 2s ease-in-out infinite;
+  }
+  
+  .animate-finger-move {
+    animation: fingerMove 1s ease-in-out infinite;
+  }

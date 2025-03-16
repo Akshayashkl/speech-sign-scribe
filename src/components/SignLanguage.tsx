@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -27,10 +26,10 @@ const Hand: React.FC<{
   const { palm, fingers } = handPosition;
 
   return (
-    <div className="hand-container h-[200px]">
+    <div className="hand-container h-[200px] relative">
       <div 
         className={cn(
-          "palm absolute",
+          "palm absolute bg-primary/20 rounded-[40%]",
           isAnimating ? "animate-hand-wave" : ""
         )}
         style={{
@@ -38,25 +37,36 @@ const Hand: React.FC<{
           top: `${palm.y}%`,
           width: `${palm.width}%`,
           height: `${palm.height}%`,
+          transform: `rotate3d(${handPosition.rotation.x}, ${handPosition.rotation.y}, ${handPosition.rotation.z}, ${Math.sqrt(
+            Math.pow(handPosition.rotation.x, 2) +
+            Math.pow(handPosition.rotation.y, 2) +
+            Math.pow(handPosition.rotation.z, 2)
+          )}deg)`,
         }}
       />
-      {fingers.map((finger, index) => (
-        <div
-          key={`finger-${index}`}
-          className={cn(
-            "finger",
-            isAnimating ? "animate-finger-move" : ""
-          )}
-          style={{
-            left: `${finger.x}%`,
-            top: `${finger.y}%`,
-            width: `${finger.width}%`,
-            height: `${finger.length}%`,
-            transform: `rotate(${finger.rotation}deg)`,
-            animationDelay: `${index * 0.1}s`,
-          }}
-        />
-      ))}
+      
+      {fingers.map((finger, index) => {
+        const fingerClass = finger.isBent ? "rounded-t-full" : "rounded-full";
+        return (
+          <div
+            key={`finger-${index}`}
+            className={cn(
+              "finger absolute bg-primary/30",
+              fingerClass,
+              isAnimating ? "animate-finger-move" : ""
+            )}
+            style={{
+              left: `${finger.x}%`,
+              top: `${finger.y}%`,
+              width: `${finger.width}%`,
+              height: `${finger.length}%`,
+              transform: `rotate(${finger.rotation}deg)`,
+              transformOrigin: "bottom center",
+              animationDelay: `${index * 0.1}s`,
+            }}
+          />
+        );
+      })}
     </div>
   );
 };
